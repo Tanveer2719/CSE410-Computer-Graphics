@@ -650,7 +650,11 @@ void keyboardListener(unsigned char key, int x,int y){
 	switch(key){
 
 		case '1':
-			// rotate LEFT 
+			// rotate LEFT
+            // params "vec, axis, angle" 
+            // up = z-axis
+            // right = y-axis
+            // look = -x axis
 			rotate3D(right,up,ROT_ANG);
 			rotate3D(look,up,ROT_ANG);
 			break;
@@ -662,8 +666,8 @@ void keyboardListener(unsigned char key, int x,int y){
 		case '3':
 			// rotate UP
 			rotate3D(up,right,ROT_ANG);
-			rotate3D(look,right,ROT_ANG);
-			break;
+			break;			rotate3D(look,right,ROT_ANG);
+
 		case '4':
 			// rotate DOWN
 			rotate3D(up,right,-ROT_ANG);
