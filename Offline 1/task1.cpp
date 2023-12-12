@@ -11,15 +11,10 @@ double cameraAngle;
 int drawgrid;
 int drawaxes;
 double angle;
+bool simulationMode;
 
 Camera* camera;
 Sphere* sphere;
-
-
-struct point
-{
-	double x,y,z;
-};
 
 
 void drawAxes()
@@ -107,8 +102,8 @@ void drawFloor1(){
 		}
 	} glPopMatrix();
 
-    tile_s = .4;
-    int small_box_length = 21, small_box_width = 21;
+    tile_s = .1;
+    int small_box_length = 51, small_box_width = 51;
     glPushMatrix();{
         glTranslatef(-small_box_length * tile_s, -small_box_width * tile_s, 0);
         for(int i = 0; i<small_box_length; i++){
@@ -171,6 +166,9 @@ void keyboardListener(unsigned char key, int x,int y){
 		case 'l':
 			sphere->rotate_arrow_clockwise();
 			break;
+		case ' ':
+			simulationMode = !simulationMode;
+			break;
 
 		default:
 			break;
@@ -213,26 +211,13 @@ void specialKeyListener(int key, int x,int y){
 	}
 }
 
-void mouseListener(int button, int state, int x, int y){	//x, y is the x-y of the screen (2D)
-	switch(button){
-		case GLUT_LEFT_BUTTON:
-			if(state == GLUT_DOWN){		// 2 times?? in ONE click? -- solution is checking DOWN or UP
-				drawaxes=1-drawaxes;
-			}
-			break;
-
-		case GLUT_RIGHT_BUTTON:
-			//........
-			break;
-
-		case GLUT_MIDDLE_BUTTON:
-			//........
-			break;
-
-		default:
-			break;
+void timerHandler(int value) {
+	if (simulationMode) {
+		sphere->move_forward();
 	}
+	glutTimerFunc(100, timerHandler, 0);	// recursive call after 100 miliseconds
 }
+
 
 void display(){
 
@@ -250,13 +235,6 @@ void display(){
 	//initialize the matrix
 	glLoadIdentity();
 
-	//now give three info
-	//1. where is the camera (viewer)?
-	//2. where is the camera looking?
-	//3. Which direction is the camera's UP direction?
-
-	//gluLookAt(100,100,100,	0,0,0,	0,0,1);
-	//gluLookAt(200*cos(cameraAngle), 200*sin(cameraAngle), cameraHeight,		0,0,0,		0,0,1);
 	gluLookAt(camera->position->x, camera->position->y, camera->position->z,
               camera->center->x, camera->center->y, camera->center->z,
               camera->up->x, camera->up->y, camera->up->z);
@@ -269,42 +247,17 @@ void display(){
 	/****************************
 	/ Add your objects from here
 	****************************/
-	//add objects
-
-	// drawAxes();
-	// drawGrid();
-
-    //glColor3f(1,0,0);
-    //drawSquare(10);
-
-    // drawSS();
 
     glRotatef(45,0,0,1);
 	drawFloor1();  
  
-
-    // drawSquare(10);
-    // sphere->drawSphere();
-	// sphere->drawArrow();
-
-	// glRotatef(-45,0,0,1);
 	sphere->drawAll();
-
-    //drawCircle(30,24);
-
-    //drawCone(20,50,24);
-
-	//drawSphere(30,24,20);
-
-
-
 
 	//ADD this line in the end --- if you use double buffer (i.e. GL_DOUBLE)
 	glutSwapBuffers();
 }
 
 void animate(){
-	angle+=0.05;
 	//codes for any changes in Models, Camera
 	glutPostRedisplay();
 }
@@ -316,6 +269,7 @@ void init(){
 	cameraHeight=150.0;
 	cameraAngle=1.0;
 	angle=0;
+	simulationMode = false;
 
     camera = new Camera(
         new Vector3D(0, -3.706431,  4.728740),
@@ -366,7 +320,7 @@ int main(int argc, char **argv){
 
 	glutKeyboardFunc(keyboardListener);
 	glutSpecialFunc(specialKeyListener);
-	glutMouseFunc(mouseListener);
+	glutTimerFunc(200, timerHandler, 0); // timerHandler is called after 200 milliseconds
 
 	glutMainLoop();		//The main loop of OpenGL
 

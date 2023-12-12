@@ -247,7 +247,7 @@ public:
 
 
         
-        // check();        // check if the end of the block is reached
+        check();        // check if the end of the block is reached
     }
 
     // press 'k' to move backward
@@ -260,13 +260,12 @@ public:
         angular_rotation += ((linear_speed / radius) * (180.0/pi));
 
         // update position
-        *this->position = *this->position - (*this->right * linear_speed); 
+        *this->position = *this->position - (*this->forward * linear_speed); 
 
         // update look as the position is changed
-        *this->look = *this->right * (*this->up); 
-        *this->look->normalize_vector();        // up, look and right are perpendicular to each other
+        *this->look = (*this->right * (*this->up)).normalize_vector();        // up, look and right are perpendicular to each other
 
-        // check();        // check if the end of the block is reached 
+        check();        // check if the end of the block is reached 
     }
 
     // key j pressed
@@ -277,6 +276,7 @@ public:
         *this->forward = (*this->forward + &temp).normalize_vector();    // update forward
     }
 
+    // key l pressed
     void rotate_arrow_clockwise(){
         printf("rotate_arrow_clockwise called\n");
         Vector3D temp = (*this->forward * *this->look).normalize_vector();   // perpendicular to forward and up
@@ -286,7 +286,22 @@ public:
     }
 
     void check(){
-        
+        // since each red tile has size = 0.1 and there are 51 tiles
+        double border = 5.0;
+
+        if(position->x + radius >= (border-.2)) new_direction("right");
+        else if(position->y + radius >= (border)) new_direction("top");
+        else if(position->x - radius <= -(border-.2)) new_direction("left");
+        else if(position->y - radius <= -(border)) new_direction("bottom");        
+    }
+
+    void new_direction(string s){
+        if(s == "top" || s == "bottom"){
+            forward->y = -forward->y;
+        }
+        if(s == "left" || s == "right"){
+            forward->x = -forward->x;
+        }
     }
 
     void print_all(){
