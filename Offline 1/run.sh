@@ -1,4 +1,5 @@
 #!/usr/bin/bash
 
-g++ demo.cpp -o demo -lglut -lGLU -lGL
+# g++ rolling_ball.cpp -o demo -lglut -lGLU -lGL
+g++ play2.cpp -o demo -lglut -lGLU -lGL
 ./demo

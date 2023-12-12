@@ -195,7 +195,6 @@ void drawSphere(double radius,int slices,int stacks)
 	}
 }
 
-
 void drawSphereQuad(double radius,int slices,int stacks)
 {
 	struct PT points[100][100];
@@ -636,6 +635,7 @@ void drawAll(bool isRot = 0)
 
 	}
     glPopMatrix();
+
 	
 	
 }
