@@ -4,8 +4,6 @@
 
 #define pi (2*acos(0.0))
 
-int drawgrid;
-int drawaxes;
 
 double edge_len ;  // length of an edge of a triangle
 double max_edge_len;    // maximum length of an edge
@@ -15,51 +13,6 @@ double increment_radius;        // measure to increment the current sphere radiu
 
 Camera* camera;
 
-
-void drawAxes()
-{
-	if(drawaxes==1)
-	{
-		glColor3f(1.0, 1.0, 1.0);
-		glBegin(GL_LINES);{
-			glColor3f(1,0,0);   // x axis red colored
-            glVertex3f( 100,0,0);
-			glVertex3f( 0,0,0);
-
-			glColor3f(0,1,0);   // y axis green colored
-            glVertex3f(0,0,0);
-			glVertex3f(0, 100,0);
-
-			glColor3f(0,0,1);   // z axis blue colored
-            glVertex3f(0,0, 100);
-			glVertex3f(0,0,0);
-		}glEnd();
-	}
-}
-
-void drawGrid()
-{
-	int i;
-	if(drawgrid==1)
-	{
-		glColor3f(0.6, 0.6, 0.6);	//grey
-		glBegin(GL_LINES);{
-			for(i=-8;i<=8;i++){
-
-				if(i==0)
-					continue;	//SKIP the MAIN axes
-
-				//lines parallel to Y-axis
-				glVertex3f(i*10, -90, 0);
-				glVertex3f(i*10,  90, 0);
-
-				//lines parallel to X-axis
-				glVertex3f(-90, i*10, 0);
-				glVertex3f( 90, i*10, 0);
-			}
-		}glEnd();
-	}
-}
 
 void drawTriangle(double l){
     glBegin(GL_TRIANGLES);{
@@ -321,13 +274,6 @@ void display(){
 	//again select MODEL-VIEW
 	glMatrixMode(GL_MODELVIEW);
 
-
-	/****************************
-	/ Add your objects from here
-	****************************/
-
-	drawAxes();
-	drawGrid();
     
 	drawTriangles();
 	drawSphere();
@@ -343,10 +289,7 @@ void animate(){
 }
 
 void init(){
-	//codes for initialization
-	drawgrid=0;
-	drawaxes=0;
-    
+
 	edge_len = 1.6;
 	max_edge_len = 1.6;
     
@@ -365,10 +308,6 @@ void init(){
 
 	//clear the screen
 	glClearColor(0,0,0,0);
-
-	/************************
-	/ set-up projection here
-	************************/
 	
     //load the PROJECTION matrix
 	glMatrixMode(GL_PROJECTION);
@@ -380,10 +319,7 @@ void init(){
     
     //give PERSPECTIVE parameters
 	gluPerspective(80,	1,	1,	1000.0);
-	//field of view in the Y (vertically)
-	//aspect ratio that determines the field of view in the X direction (horizontally)
-	//near distance
-	//far distance
+	
 }
 
 int main(int argc, char **argv){

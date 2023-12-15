@@ -1,4 +1,5 @@
 #!/usr/bin/bash
 
-g++ play.cpp -o demo -lglut -lGLU -lGL
+g++ task1.cpp -o demo -lglut -lGLU -lGL
+g++ task2.cpp -o demo -lglut -lGLU -lGL
 ./demo

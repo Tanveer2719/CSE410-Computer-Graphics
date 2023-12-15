@@ -8,56 +8,11 @@
 
 double cameraHeight;
 double cameraAngle;
-int drawgrid;
-int drawaxes;
 double angle;
 bool simulationMode;
 
 Camera* camera;
 Sphere* sphere;
-
-
-void drawAxes()
-{
-	if(drawaxes==1)
-	{
-		glColor3f(1.0, 1.0, 1.0);
-		glBegin(GL_LINES);{
-			glVertex3f( 100,0,0);
-			glVertex3f(-100,0,0);
-
-			glVertex3f(0,-100,0);
-			glVertex3f(0, 100,0);
-
-			glVertex3f(0,0, 100);
-			glVertex3f(0,0,-100);
-		}glEnd();
-	}
-}
-
-void drawGrid()
-{
-	int i;
-	if(drawgrid==1)
-	{
-		glColor3f(0.6, 0.6, 0.6);	//grey
-		glBegin(GL_LINES);{
-			for(i=-8;i<=8;i++){
-
-				if(i==0)
-					continue;	//SKIP the MAIN axes
-
-				//lines parallel to Y-axis
-				glVertex3f(i*10, -90, 0);
-				glVertex3f(i*10,  90, 0);
-
-				//lines parallel to X-axis
-				glVertex3f(-90, i*10, 0);
-				glVertex3f( 90, i*10, 0);
-			}
-		}glEnd();
-	}
-}
 
 void drawSquare(double a)
 {
@@ -70,7 +25,7 @@ void drawSquare(double a)
 	}glEnd();
 }
 
-void drawFloor1(){
+void drawCheckBoard(){
 	double tile_s = 1.5;
 	int length  = 50, width = 50;
 	bool white = false;
@@ -218,7 +173,6 @@ void timerHandler(int value) {
 	glutTimerFunc(100, timerHandler, 0);	// recursive call after 100 miliseconds
 }
 
-
 void display(){
 
 	//clear the display
@@ -226,9 +180,6 @@ void display(){
 	glClearColor(0,0,0,0);	//color black
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	/********************
-	/ set-up camera here
-	********************/
 	//load the correct matrix -- MODEL-VIEW matrix
 	glMatrixMode(GL_MODELVIEW);
 
@@ -244,12 +195,8 @@ void display(){
 	glMatrixMode(GL_MODELVIEW);
 
 
-	/****************************
-	/ Add your objects from here
-	****************************/
-
     glRotatef(45,0,0,1);
-	drawFloor1();  
+	drawCheckBoard();  
  
 	sphere->drawAll();
 
@@ -263,9 +210,6 @@ void animate(){
 }
 
 void init(){
-	//codes for initialization
-	drawgrid=0;
-	drawaxes=1;
 	cameraHeight=150.0;
 	cameraAngle=1.0;
 	angle=0;
@@ -286,9 +230,6 @@ void init(){
 	//clear the screen
 	glClearColor(0,0,0,0);
 
-	/************************
-	/ set-up projection here
-	************************/
 	//load the PROJECTION matrix
 	glMatrixMode(GL_PROJECTION);
 
@@ -297,10 +238,7 @@ void init(){
 
 	//give PERSPECTIVE parameters
 	gluPerspective(80,	1,	1,	1000.0);
-	//field of view in the Y (vertically)
-	//aspect ratio that determines the field of view in the X direction (horizontally)
-	//near distance
-	//far distance
+
 }
 
 int main(int argc, char **argv){
