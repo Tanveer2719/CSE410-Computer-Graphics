@@ -356,6 +356,23 @@ void init(){
 
 }
 
+void freeMemory()
+{
+	pointLights.clear();
+    spotlights.clear();
+
+
+    for (auto ob : objects)
+    {
+        delete ob;
+    }
+   
+    objects.clear();
+
+	cout<<"all memory freed\n";
+
+}
+
 int main(int argc, char **argv){
 	glutInit(&argc,argv);
 	glutInitWindowSize(500, 500);
@@ -373,7 +390,7 @@ int main(int argc, char **argv){
 
 	glutKeyboardFunc(keyboardListener);
 	glutSpecialFunc(specialKeyListener);
-
+	atexit(freeMemory);
 	glutMainLoop();		//The main loop of OpenGL
 
 	return 0;
