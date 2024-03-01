@@ -73,7 +73,7 @@ void drawGrid()
 
 void loadData()
 {
-	ifstream input("scene1.txt");
+	ifstream input("scene.txt");
 	input >> recursionLevel >> imageHeight;
 
 	imageWidth = imageHeight;
@@ -128,7 +128,7 @@ void loadData()
 
 	Object *floor = new Floor(1000, 20);
 	floor->setColor(Color(0.5, 0.5, 0.5));
-	floor->setcoEfficients(0.4, 0.2, 0.2, 0.2);
+	floor->setcoEfficients(.4, .4, .2, .2);
 	objects.push_back(floor);
 	
 }
@@ -147,7 +147,9 @@ void capture(){
 	// plane distance is the distance from the camera to the view plane
 	double plane_distance = (windowHeight/2.0) / tan(view_angle*pi/360.0);
 
-	Vector3D topleft = *camera->position + (*camera->look*plane_distance) + (*camera->up*(windowHeight/2.0)) - (*camera->right*(windowWidth/2.0)) ;
+	Vector3D topleft = *camera->position + (*camera->look*plane_distance) 
+						+ (*camera->up*(windowHeight/2.0)) 
+						- (*camera->right*(windowWidth/2.0)) ;
 
 	double du = (windowWidth*1.0)/imageWidth;
 	double dv = (windowHeight*1.0)/imageHeight;
@@ -172,7 +174,7 @@ void capture(){
 			// cast ray from camera to current pixel
 			Ray ray(*camera->position, (current - *camera->position));
 
-			Color color;
+			Color color(0,0,0);
 			tMin = -1;
 			int nearest=-1 ;
 			for(int k = 0; k<(int)objects.size(); k++){
@@ -201,7 +203,7 @@ void capture(){
 		}
 	}
 
-	image.save_image("Output_"+to_string(no_of_image++)+".bmp");
+	image.save_image("Output_1"+to_string(no_of_image++)+".bmp");
 	cout<<"returning from capture\n";
 }
 

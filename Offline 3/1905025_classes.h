@@ -580,8 +580,8 @@ public:
                                         diffuse_component, specular_component);
             }
         }
-      /*******************Reflection*************/
-        
+      
+      /*******************Reflection*************/ 
         if(level < recursionLevel){
 
             // find normal at incidentPoint
@@ -594,9 +594,6 @@ public:
             Vector3D reflected_origin = incidentPoint + reflected_direction*epsilon;
 
             Ray reflectedRay = Ray(reflected_origin, reflected_direction);
-
-            // slightly shift the origin to avoid self intersection
-            // reflectedRay.origin = reflectedRay.origin + reflectedRay.direction*epsilon ;
             
             Color temp_color(0,0,0);
             int nearest = find_nearest_object(reflectedRay, temp_color);
@@ -613,11 +610,14 @@ public:
         return t;
     }
   
+    
     virtual void print()=0;
 
     virtual ~Object(){}
     
 };
+
+
 
 class Sphere: public Object{
     
@@ -669,6 +669,8 @@ class Sphere: public Object{
         
         }glPopMatrix();
     }
+
+
 
     virtual double objectRayIntersection(Ray &ray){
         ray.origin = ray.origin - reference_point;
@@ -763,6 +765,8 @@ class Sphere: public Object{
     ~Sphere(){}
 };
 
+
+
 class Triangle: public Object{
     Vector3D  a, b, c;
     
@@ -804,6 +808,7 @@ class Triangle: public Object{
                 glEnd();
             }glPopMatrix();
         }
+
 
         virtual  double objectRayIntersection(Ray &ray){
             
@@ -878,6 +883,9 @@ class Triangle: public Object{
 
 };
  
+
+
+
 class Floor: public Object{
     int noOfTiles;
   
@@ -942,6 +950,7 @@ class Floor: public Object{
             } 
         }
 
+
         virtual double objectRayIntersection(Ray &ray){
 
             Vector3D  normal = Vector3D (0,0,1);
@@ -963,7 +972,7 @@ class Floor: public Object{
             }
             return t; 
         }
-       
+      
         virtual void print(){
             cout<<"Floor\n";
             cout<<"reference_point: "<<reference_point<<endl;
@@ -974,6 +983,8 @@ class Floor: public Object{
         ~Floor(){}  
 
 };
+
+
 
 class General: public Object{
     //Equation: F(x,y,z) = Ax2+By2+Cz2+Dxy+Exz+Fyz+Gx+Hy+Iz+J = 0
@@ -1047,7 +1058,6 @@ class General: public Object{
             double ny = 2*B*y + D*x + F*z + H;
             double nz = 2*C*z + E*x + F*y + I;
             Vector3D  normal = Vector3D (nx, ny, nz);
-            normal.normalize_vector();
             return Ray(point, normal);
         }
 
